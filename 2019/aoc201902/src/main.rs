@@ -13,10 +13,24 @@ fn main() {
         program[1] = 12;
         program[2] = 2;
         println!("done");
-        println!("Running program...");
+        print!("Running program...");
         let retval = run(&mut program);
         println!("...done");
         println!("Location 0 is {}", retval);
+        print!("Finding 19690720...");
+        for noun in 0..100 {
+            for verb in 0..100 {
+                let mut thisprogram = _my_line.split(",").map(|s| s.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+                thisprogram[1] = noun;
+                thisprogram[2] = verb;
+                let retval = run(&mut thisprogram);
+                if retval == 19690720 {
+                    println!("done");
+                    println!("noun {} verb {} result {}", noun, verb, 100*noun+verb);
+                }
+            }
+        }
+
     }
 }
 
