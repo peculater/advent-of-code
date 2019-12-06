@@ -1,33 +1,21 @@
-#[derive(Hash, Clone, Copy, Eq)]
+#[derive(Hash, Clone, Copy, Eq, PartialEq)]
 struct Point {
     x: i32,
     y: i32,
 }
 
-impl PartialEq for Point {
-    fn eq(&self, other: &Self) -> bool {
-        self.x == other.x && self.y == other.y
-    }
-}
-
-
 use std::io::{BufReader, BufRead};
 use std::fs::File;
-use array_tool::vec::*;
 use std::collections::HashSet;
 
 fn main() {
-    let _dummy = vec![1,1,3,5].intersect(vec![1,2,3]);
     let file = BufReader::new(File::open("input").unwrap());
     let mut fileiter = file.lines();
     print!("Parsing first wire...");
     let first_line_string = fileiter.next().unwrap().unwrap();
     let first_line_steps = first_line_string.split(",").collect::<Vec<&str>>();
     let first_line_points = steps_to_points(&first_line_steps); 
-    let mut first_line_hash = HashSet::new();
-    for point in &first_line_points {
-        first_line_hash.insert(point);
-    }
+    let first_line_hash: HashSet<Point> = first_line_points.iter().cloned().collect();
     println!("done");
     println!("First wire has {} points", first_line_points.len());
     print!("Parsing second wire...");
@@ -36,20 +24,10 @@ fn main() {
     let second_line_points = steps_to_points(&second_line_steps); 
     println!("done");
     println!("Second wire has {} points", second_line_points.len());
-    println!("Calculating intersection.  This will take {} loops", second_line_points.len());
-    let mut second_line_hash = HashSet::new();
-    for point in &second_line_points {
-        second_line_hash.insert(point);
-    }
-    //let intersections: Vec<Point> = second_line_points
-    //        .into_iter()
-    //        .filter(|p| first_line_points.contains(p))
-    //        .collect();
+    print!("Calculating intersection...");
+    let second_line_hash: HashSet<Point> = second_line_points.iter().cloned().collect();
     let intersections = first_line_hash.intersection(&second_line_hash);
     println!("done");
-    //for intersection in intersections{
-    //  println!("Intersected at {}, {} total of {}", intersection.x, intersection.y, intersection.x.abs() + intersection.y.abs());
-    //}
     let min = intersections.min_by(|l, r| (l.x.abs()+l.y.abs()).cmp(&(r.x.abs()+r.y.abs()))).unwrap();
     println!("Min distance {}", min.x.abs() + min.y.abs());
 }
